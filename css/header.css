@@ -1,0 +1,315 @@
+/* ===== Header: Status Bar + Tab Bar + Toolbar ===== */
+
+.header {
+  background: #DEE3EB;
+  flex-shrink: 0;
+}
+
+/* --- Status Bar --- */
+.status-bar {
+  height: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 26px;
+  margin-bottom: 8px;
+  color: #242424;
+}
+
+.status-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 510;
+  line-height: 1.2;
+}
+
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 510;
+}
+
+.status-wifi {
+  width: 16px;
+  height: 12px;
+  color: #242424;
+}
+
+.status-battery-text {
+  font-size: 12px;
+}
+
+.status-battery {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.status-battery-body {
+  width: 24px;
+  height: 12px;
+  border: 1px solid rgba(0,0,0,0.4);
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.status-battery-fill {
+  width: 100%;
+  height: 100%;
+  background: #242424;
+  border-radius: 1.5px;
+}
+
+.status-battery-cap {
+  width: 1.5px;
+  height: 4px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 0 1px 1px 0;
+}
+
+/* --- Tab Bar --- */
+.tab-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 0 2px 16px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  width: 260px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+}
+
+.tab.active {
+  background: rgba(255,255,255,0.85);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.14), 0 0 2px rgba(0,0,0,0.12);
+}
+
+.tab-favicon {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.tab-favicon-ppt { background: #D04423; }
+.tab-favicon-pdf { background: #C4281C; }
+.tab-favicon-edge { background: #0078D4; }
+
+.tab-title {
+  font-size: 13px;
+  line-height: 1.38;
+  letter-spacing: -0.006em;
+  color: rgba(0,0,0,0.86);
+  white-space: nowrap;
+  overflow: hidden;
+  flex: 1;
+  mask-image: linear-gradient(to left, transparent 0%, black 20%, black 100%);
+  -webkit-mask-image: linear-gradient(to left, transparent 0%, black 20%, black 100%);
+}
+
+.tab-close {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: rgba(0,0,0,0.56);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.tab-close:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.tab-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(0,0,0,0.15);
+}
+
+.tab-wing-left,
+.tab-wing-right {
+  display: none; /* Simplified - skip wing shapes */
+}
+
+.tab-add-btn {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0,0,0,0.56);
+}
+
+.tab-add-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* --- Header Shadow --- */
+.header-shadow {
+  height: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.14), 0 0 2px rgba(0,0,0,0.12);
+}
+
+/* --- Toolbar --- */
+.toolbar {
+  height: 52px;
+  position: relative;
+}
+
+.toolbar-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+  background: #F4F7FB;
+  backdrop-filter: blur(50px);
+}
+
+.toolbar-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #7B83EB;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.toolbar-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.toolbar-btn {
+  width: 48px;
+  height: 48px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0,0,0,0.86);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.toolbar-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.toolbar-tab-count {
+  position: absolute;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(0,0,0,0.86);
+}
+
+.nav-back, .nav-forward {
+  width: 32px;
+  height: 32px;
+}
+
+.nav-back.disabled, .nav-forward.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* --- Omni Box --- */
+.omni-box {
+  flex: 1;
+  height: 36px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.omni-center {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+  width: 100%;
+  padding: 0 12px;
+}
+
+.omni-lock {
+  width: 20px;
+  height: 20px;
+  color: #242424;
+  flex-shrink: 0;
+}
+
+.omni-input {
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  font-family: inherit;
+  color: rgba(0,0,0,0.86);
+  outline: none;
+  text-align: center;
+  width: 200px;
+}
+
+.omni-refresh {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: rgba(0,0,0,0.86);
+  width: 24px;
+  height: 24px;
+}
+
+.omni-refresh svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* --- Toolbar Right --- */
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}

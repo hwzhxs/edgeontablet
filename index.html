@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edge iPad - Copilot Side Pane</title>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/header.css">
+<link rel="stylesheet" href="css/content.css">
+<link rel="stylesheet" href="css/sidepane.css">
+<link rel="stylesheet" href="css/nudge.css">
+</head>
+<body>
+
+<div class="ipad-frame">
+
+  <!-- ===== HEADER: Status Bar + Tab Bar + Toolbar ===== -->
+  <div class="header">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <div class="status-left">
+        <span class="status-time">9:41</span>
+        <span class="status-date">Mon Jun 10</span>
+      </div>
+      <div class="status-right">
+        <svg class="status-wifi" viewBox="0 0 16 12" fill="none"><path d="M8 11.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" fill="currentColor"/><path d="M4.5 7.2a5 5 0 017 0" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M2 4a9 9 0 0112 0" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg>
+        <span class="status-battery-text">100%</span>
+        <div class="status-battery">
+          <div class="status-battery-body"><div class="status-battery-fill"></div></div>
+          <div class="status-battery-cap"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <div class="tab" data-tab="1">
+        <div class="tab-favicon tab-favicon-ppt"></div>
+        <span class="tab-title">The Economics of Generative AI</span>
+        <button class="tab-close">&times;</button>
+      </div>
+      <div class="tab-divider"></div>
+      <div class="tab" data-tab="2">
+        <div class="tab-favicon tab-favicon-pdf"></div>
+        <span class="tab-title">Generation Z and its implications for companies</span>
+        <button class="tab-close">&times;</button>
+      </div>
+      <div class="tab active" data-tab="3">
+        <div class="tab-favicon tab-favicon-edge"></div>
+        <span class="tab-title">Agentic AI vs Generative AI: Under</span>
+        <button class="tab-close">&times;</button>
+        <div class="tab-wing-left"></div>
+        <div class="tab-wing-right"></div>
+      </div>
+      <button class="tab-add-btn">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <!-- Shadow separator -->
+    <div class="header-shadow"></div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="toolbar-inner">
+        <!-- Avatar -->
+        <div class="toolbar-avatar">
+          <img src="assets/avatar.svg" alt="User">
+        </div>
+
+        <!-- Nav arrows -->
+        <button class="toolbar-btn nav-back">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="toolbar-btn nav-forward">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <!-- Omni box -->
+        <div class="omni-box">
+          <div class="omni-center">
+            <input type="text" class="omni-input" id="omniInput" value="baidu.com" spellcheck="false" autocomplete="off">
+          </div>
+          <button class="omni-refresh">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 4.5C7.86 4.5 4.5 7.86 4.5 12s3.36 7.5 7.5 7.5 7.5-3.36 7.5-7.5c0-.38-.03-.75-.08-1.11-.07-.45.26-.89.72-.89.37 0 .7.26.75.62.07.45.1.91.1 1.38 0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c2.3 0 4.41.87 6 2.29V4.25c0-.41.34-.75.75-.75s.75.34.75.75V7.25c0 .41-.34.75-.75.75H15.75c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h1.35C15.76 5.26 13.97 4.5 12 4.5z" fill="currentColor"/></svg>
+          </button>
+        </div>
+
+        <!-- Right toolbar icons -->
+        <div class="toolbar-right">
+          <button class="toolbar-btn btn-share">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12M5 10l7-7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 17v2a2 2 0 002 2h10a2 2 0 002-2v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <button class="toolbar-btn btn-star">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l2.8 5.7 6.3.9-4.6 4.5 1.1 6.3L12 16.3l-5.6 3.1 1.1-6.3L3 8.6l6.3-.9L12 2z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="toolbar-btn btn-tabs">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="17" height="17" rx="3" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span class="toolbar-tab-count">3</span>
+          </button>
+          <button class="toolbar-btn btn-menu">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+
+          <!-- Nudge button -->
+          <div class="nudge" id="nudge">
+            <div class="nudge-icon">
+              <svg viewBox="0 0 28 28" fill="none"><path d="M17.07 3.66c-.29-.99-1.19-1.66-2.22-1.66h-.68c-1.12 0-2.07.8-2.28 1.9l-1.18 6.42.32-1.1c.29-.99 1.19-1.67 2.22-1.67h3.92l1.65.64 1.59-.64h-.46c-1.03 0-1.93-.68-2.22-1.66l-.66-2.23z" fill="url(#n0)"/><path d="M7.17 20.33c.29.99 1.19 1.67 2.22 1.67h1.45c1.25 0 2.27-.99 2.31-2.24l.22-6.34-.41 1.37c-.29.98-1.19 1.66-2.22 1.66H6.79l-1.41-.77-1.53.77h.46c1.03 0 1.94.68 2.23 1.67l.63 2.21z" fill="url(#n1)"/><path d="M14.75 2H6.73c-2.29 0-3.67 3.03-4.58 6.06C1.06 11.64-.36 16.44 3.75 16.44h3.46c1.04 0 1.94-.68 2.23-1.68.6-2.11 1.66-5.78 2.49-8.58.42-1.42.77-2.64 1.31-3.4.3-.43.8-.78 1.51-.78z" fill="url(#n2)"/><path d="M14.75 2H6.73c-2.29 0-3.67 3.03-4.58 6.06C1.06 11.64-.36 16.44 3.75 16.44h3.46c1.04 0 1.94-.68 2.23-1.68.6-2.11 1.66-5.78 2.49-8.58.42-1.42.77-2.64 1.31-3.4.3-.43.8-.78 1.51-.78z" fill="url(#n3)"/><path d="M9.25 22h8.02c2.29 0 3.69-3.03 4.58-6.06 1.09-3.59 2.51-8.38-1.6-8.38h-3.46c-1.04 0-1.94.68-2.23 1.68-.6 2.1-1.66 5.78-2.49 8.58-.42 1.42-.77 2.64-1.31 3.4-.3.43-.8.78-1.51.78z" fill="url(#n4)"/><path d="M9.25 22h8.02c2.29 0 3.69-3.03 4.58-6.06 1.09-3.59 2.51-8.38-1.6-8.38h-3.46c-1.04 0-1.94.68-2.23 1.68-.6 2.1-1.66 5.78-2.49 8.58-.42 1.42-.77 2.64-1.31 3.4-.3.43-.8.78-1.51.78z" fill="url(#n5)"/><defs><radialGradient id="n0" cx="0" cy="0" r="1" gradientTransform="matrix(-5.5 -6.79 -5.94 5.7 19 10.38)" gradientUnits="userSpaceOnUse"><stop offset=".1" stop-color="#00AEFF"/><stop offset=".77" stop-color="#2253CE"/><stop offset="1" stop-color="#0736C4"/></radialGradient><radialGradient id="n1" cx="0" cy="0" r="1" gradientTransform="matrix(4.98 6.47 5.88 -5.28 5.58 16.25)" gradientUnits="userSpaceOnUse"><stop stop-color="#FFB657"/><stop offset=".63" stop-color="#FF5F3D"/><stop offset=".92" stop-color="#C02B3C"/></radialGradient><linearGradient id="n2" x1="6.25" y1="3.75" x2="7.39" y2="16.99" gradientUnits="userSpaceOnUse"><stop offset=".16" stop-color="#0D91E1"/><stop offset=".49" stop-color="#52B471"/><stop offset=".65" stop-color="#98BD42"/><stop offset=".94" stop-color="#FFC800"/></linearGradient><linearGradient id="n3" x1="7.25" y1="2" x2="7.88" y2="16.44" gradientUnits="userSpaceOnUse"><stop stop-color="#3DCBFF"/><stop offset=".25" stop-color="#0588F7" stop-opacity="0"/></linearGradient><radialGradient id="n4" cx="0" cy="0" r="1" gradientTransform="matrix(-6.34 18.11 -21.56 -7.99 20.66 6.15)" gradientUnits="userSpaceOnUse"><stop offset=".07" stop-color="#8C48FF"/><stop offset=".5" stop-color="#F2598A"/><stop offset=".9" stop-color="#FFB152"/></radialGradient><linearGradient id="n5" x1="21.29" y1="6.68" x2="21.29" y2="10.61" gradientUnits="userSpaceOnUse"><stop offset=".06" stop-color="#F8ADFA"/><stop offset=".71" stop-color="#A86EDD" stop-opacity="0"/></linearGradient></defs></svg>
+            </div>
+            <div class="nudge-text-wrap">
+              <span class="nudge-text nudge-text-short">Chat</span>
+              <span class="nudge-text nudge-text-long">Summarize</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CONTENT AREA ===== -->
+  <div class="content-area" id="contentArea">
+    <!-- Web page content -->
+    <div class="page-content" id="pageContent">
+      <div class="page-baidu" id="pageBaidu">
+        <div class="baidu-logo">
+          <span class="baidu-text">百度</span>
+        </div>
+        <div class="baidu-search">
+          <input type="text" placeholder="百度一下，你就知道" readonly>
+          <button class="baidu-btn">百度一下</button>
+        </div>
+      </div>
+      <div class="page-medium" id="pageMedium" style="display:none">
+        <div class="medium-header">
+          <div class="medium-logo">Medium</div>
+        </div>
+        <article class="medium-article">
+          <h1>Agentic AI vs Generative AI: Understanding the Key Differences</h1>
+          <div class="medium-meta">
+            <span class="medium-author">MyScale</span>
+            <span class="medium-date">· Jun 8, 2024</span>
+            <span class="medium-read">· 12 min read</span>
+          </div>
+          <p>Artificial Intelligence (AI) has evolved significantly over the past few decades, leading to the development of various specialized forms. Two of the most discussed types in recent times are <strong>Agentic AI</strong> and <strong>Generative AI</strong>. While both fall under the broad umbrella of AI, they serve different purposes and operate in distinct ways.</p>
+          <h2>What is Agentic AI?</h2>
+          <p>Agentic AI refers to AI systems that can make decisions and take actions autonomously to achieve specific goals. Unlike traditional AI, which follows predefined rules, Agentic AI is proactive — it can adapt to changing situations and handle complex tasks that require ongoing problem-solving and decision-making.</p>
+          <h2>What is Generative AI?</h2>
+          <p>Generative AI focuses on creating new content, such as text, images, music, or video. It is reactive, responding to input based on learned patterns, but it cannot make its own decisions or adapt to new situations independently.</p>
+          <h2>Key Differences</h2>
+          <table>
+            <thead><tr><th>Aspect</th><th>Agentic AI</th><th>Generative AI</th></tr></thead>
+            <tbody>
+              <tr><td>Autonomy</td><td>High — makes independent decisions</td><td>Low — responds to prompts</td></tr>
+              <tr><td>Behavior</td><td>Goal-directed, proactive</td><td>Task-oriented, reactive</td></tr>
+              <tr><td>Adaptation</td><td>Real-time learning</td><td>No real-time adaptation</td></tr>
+              <tr><td>Decision Making</td><td>Complex, multi-step</td><td>Basic, pattern-based</td></tr>
+            </tbody>
+          </table>
+          <h2>Case Study</h2>
+          <p>The article includes a case study demonstrating how Agentic AI outperforms traditional methods in coding tasks by using an iterative, step-by-step approach, continuously refining its output based on feedback and changing requirements.</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- Copilot Side Pane -->
+    <div class="side-pane" id="sidePane">
+      <div class="side-pane-inner">
+        <!-- Side Pane Header -->
+        <div class="sp-header">
+          <div class="sp-header-left"></div>
+          <div class="sp-header-center">
+            <svg class="sp-copilot-icon" viewBox="0 0 24 24" fill="none"><path d="M17.07 3.66c-.29-.99-1.19-1.66-2.22-1.66h-.68c-1.12 0-2.07.8-2.28 1.9l-1.18 6.42.32-1.1c.29-.99 1.19-1.67 2.22-1.67h3.92l1.65.64 1.59-.64h-.46c-1.03 0-1.93-.68-2.22-1.66l-.66-2.23z" fill="url(#sp0)"/><path d="M7.17 20.33c.29.99 1.19 1.67 2.22 1.67h1.45c1.25 0 2.27-.99 2.31-2.24l.22-6.34-.41 1.37c-.29.98-1.19 1.66-2.22 1.66H6.79l-1.41-.77-1.53.77h.46c1.03 0 1.94.68 2.23 1.67l.63 2.21z" fill="url(#sp1)"/><path d="M14.75 2H6.73c-2.29 0-3.67 3.03-4.58 6.06C1.06 11.64-.36 16.44 3.75 16.44h3.46c1.04 0 1.94-.68 2.23-1.68.6-2.11 1.66-5.78 2.49-8.58.42-1.42.77-2.64 1.31-3.4.3-.43.8-.78 1.51-.78z" fill="url(#sp2)"/><path d="M14.75 2H6.73c-2.29 0-3.67 3.03-4.58 6.06C1.06 11.64-.36 16.44 3.75 16.44h3.46c1.04 0 1.94-.68 2.23-1.68.6-2.11 1.66-5.78 2.49-8.58.42-1.42.77-2.64 1.31-3.4.3-.43.8-.78 1.51-.78z" fill="url(#sp3)"/><path d="M9.25 22h8.02c2.29 0 3.69-3.03 4.58-6.06 1.09-3.59 2.51-8.38-1.6-8.38h-3.46c-1.04 0-1.94.68-2.23 1.68-.6 2.1-1.66 5.78-2.49 8.58-.42 1.42-.77 2.64-1.31 3.4-.3.43-.8.78-1.51.78z" fill="url(#sp4)"/><path d="M9.25 22h8.02c2.29 0 3.69-3.03 4.58-6.06 1.09-3.59 2.51-8.38-1.6-8.38h-3.46c-1.04 0-1.94.68-2.23 1.68-.6 2.1-1.66 5.78-2.49 8.58-.42 1.42-.77 2.64-1.31 3.4-.3.43-.8.78-1.51.78z" fill="url(#sp5)"/><defs><radialGradient id="sp0" cx="0" cy="0" r="1" gradientTransform="matrix(-5.5 -6.79 -5.94 5.7 19 10.38)" gradientUnits="userSpaceOnUse"><stop offset=".1" stop-color="#00AEFF"/><stop offset=".77" stop-color="#2253CE"/><stop offset="1" stop-color="#0736C4"/></radialGradient><radialGradient id="sp1" cx="0" cy="0" r="1" gradientTransform="matrix(4.98 6.47 5.88 -5.28 5.58 16.25)" gradientUnits="userSpaceOnUse"><stop stop-color="#FFB657"/><stop offset=".63" stop-color="#FF5F3D"/><stop offset=".92" stop-color="#C02B3C"/></radialGradient><linearGradient id="sp2" x1="6.25" y1="3.75" x2="7.39" y2="16.99" gradientUnits="userSpaceOnUse"><stop offset=".16" stop-color="#0D91E1"/><stop offset=".49" stop-color="#52B471"/><stop offset=".65" stop-color="#98BD42"/><stop offset=".94" stop-color="#FFC800"/></linearGradient><linearGradient id="sp3" x1="7.25" y1="2" x2="7.88" y2="16.44" gradientUnits="userSpaceOnUse"><stop stop-color="#3DCBFF"/><stop offset=".25" stop-color="#0588F7" stop-opacity="0"/></linearGradient><radialGradient id="sp4" cx="0" cy="0" r="1" gradientTransform="matrix(-6.34 18.11 -21.56 -7.99 20.66 6.15)" gradientUnits="userSpaceOnUse"><stop offset=".07" stop-color="#8C48FF"/><stop offset=".5" stop-color="#F2598A"/><stop offset=".9" stop-color="#FFB152"/></radialGradient><linearGradient id="sp5" x1="21.29" y1="6.68" x2="21.29" y2="10.61" gradientUnits="userSpaceOnUse"><stop offset=".06" stop-color="#F8ADFA"/><stop offset=".71" stop-color="#A86EDD" stop-opacity="0"/></linearGradient></defs></svg>
+            <span class="sp-header-title">Copilot</span>
+          </div>
+          <button class="sp-close" id="spClose">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M6.4 18L5 16.6 10.6 11 5 5.4 6.4 4 12 9.6 17.6 4 19 5.4 13.4 11 19 16.6 17.6 18 12 12.4z" fill="currentColor"/></svg>
+          </button>
+        </div>
+
+        <!-- Chat messages -->
+        <div class="sp-chat" id="spChat">
+          <!-- User message -->
+          <div class="sp-msg sp-msg-user">
+            <div class="sp-msg-bubble">summarize this webpage</div>
+          </div>
+          <!-- AI response (typed in by JS) -->
+          <div class="sp-msg sp-msg-ai">
+            <div class="sp-msg-content" id="spAiResponse"></div>
+          </div>
+        </div>
+
+        <!-- Suggested follow-ups -->
+        <div class="sp-suggestions" id="spSuggestions">
+          <button class="sp-chip">How can I amplify my voice?</button>
+          <button class="sp-chip">What confidence-building tips can I apply?</button>
+          <button class="sp-chip">How can I practice visualization exercises?</button>
+        </div>
+
+        <!-- Composer -->
+        <div class="sp-composer">
+          <div class="sp-composer-inner">
+            <button class="sp-composer-btn sp-composer-home">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M10.55 2.53c.84-.7 2.06-.7 2.9 0l7.1 5.96c.4.33.63.83.63 1.36v10.07c0 .83-.68 1.5-1.5 1.5h-4.56c-.83 0-1.5-.67-1.5-1.5v-5.08c0-.14-.11-.25-.25-.25h-2.74c-.14 0-.25.11-.25.25v5.08c0 .83-.67 1.5-1.5 1.5H4.32c-.83 0-1.5-.67-1.5-1.5V9.85c0-.53.23-1.03.63-1.36l7.1-5.96z" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+            </button>
+            <button class="sp-composer-btn sp-composer-plus">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+            <div class="sp-composer-input">
+              <span class="sp-composer-placeholder">Message Copilot</span>
+            </div>
+            <button class="sp-composer-btn sp-composer-mic">
+              <svg viewBox="0 0 20 24" fill="none"><rect x="5" y="1" width="10" height="14" rx="5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M1 12c0 5 4 9 9 9s9-4 9-9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Home Indicator -->
+  <div class="home-indicator">
+    <div class="home-indicator-bar"></div>
+  </div>
+
+</div>
+
+<script src="js/app.js"></script>
+
+</body>
+</html>
