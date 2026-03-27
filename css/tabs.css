@@ -1,0 +1,168 @@
+/* --- Tab Bar --- */
+.tab-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  padding: 0 0 0 16px;
+  position: relative;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  width: 260px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tab-favicon {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.tab-favicon-ppt { background: #D04423; }
+.tab-favicon-pdf { background: #C4281C; }
+.tab-favicon-edge { background: #0078D4; }
+
+.tab-title {
+  font-family: 'SF Pro Text', -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.38;
+  letter-spacing: -0.006em;
+  color: rgba(0,0,0,0.86);
+  white-space: nowrap;
+  overflow: hidden;
+  flex: 1;
+  padding: 1px 20px 3px 0;
+  mask-image: linear-gradient(to right, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+}
+
+.tab-close {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: rgba(0,0,0,0.56);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.tab:hover .tab-close {
+  opacity: 1;
+}
+
+.tab-close:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+/* ===== Active Tab — connects to toolbar below ===== */
+.tab.active {
+  height: 34px;
+  border-radius: 12px 12px 0 0;
+  z-index: 2;
+  background: transparent; /* Backplate handles the color */
+}
+
+.tab.active .tab-close {
+  opacity: 1;
+}
+
+/* Backplate — sits behind the active tab, same color as toolbar (#F4F7FB) */
+.tab.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 34px;
+  background: #F4F7FB;
+  border-radius: 8px 8px 0 0;
+  z-index: -1;
+}
+
+/* Extend backplate below tab to overlap with toolbar — seamless connection */
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #F4F7FB;
+  z-index: 3;
+}
+
+/* Wing connectors — curved connection between active tab and toolbar bg */
+.tab-wing-left,
+.tab-wing-right {
+  display: none;
+}
+
+.tab.active .tab-wing-left,
+.tab.active .tab-wing-right {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  width: 8px;
+  height: 8px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.tab.active .tab-wing-left {
+  left: -8px;
+  background: radial-gradient(circle at 0% 0%, transparent 8px, #F4F7FB 8px);
+}
+
+.tab.active .tab-wing-right {
+  right: -8px;
+  background: radial-gradient(circle at 100% 0%, transparent 8px, #F4F7FB 8px);
+}
+
+/* Divider between tabs */
+.tab-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(0,0,0,0.15);
+  flex-shrink: 0;
+  margin: 0 2px;
+  align-self: center;
+}
+
+/* Add tab button */
+.tab-add-btn {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0,0,0,0.56);
+  flex-shrink: 0;
+  margin-left: 2px;
+}
+
+.tab-add-btn svg {
+  width: 20px;
+  height: 20px;
+}
