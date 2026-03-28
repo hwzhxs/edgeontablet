@@ -160,6 +160,18 @@
   display: flex;
   align-items: center;
   position: relative;
+  transition: background 0.3s ease;
+}
+
+/* NTP state: blend into toolbar, invisible but still occupies space */
+.omni-box.omni-hidden {
+  background: transparent;
+  pointer-events: none;
+}
+
+.omni-box.omni-hidden .omni-center,
+.omni-box.omni-hidden .omni-refresh {
+  opacity: 0;
 }
 
 .omni-center {
@@ -172,10 +184,13 @@
 }
 
 .omni-lock {
-  width: 20px;
-  height: 20px;
-  color: #242424;
-  flex-shrink: 0;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: rgba(0,0,0,0.56);
 }
 
 .omni-input {

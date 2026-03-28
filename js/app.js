@@ -1,185 +1,332 @@
-// ===== Edge iPad Copilot Side Pane =====
-// Step 1: Default (baidu.com + short "Chat" nudge)
-// Step 2: URL → medium.com (nudge expands to "Summarize webpage")
-// Step 3: Click nudge → Copilot side pane slides in with typing animation
+// ===== Edge iPad Copilot — Tab Management + Side Pane =====
 
+// ===== DOM =====
+const tabBar = document.getElementById('tabBar');
 const omniInput = document.getElementById('omniInput');
 const nudge = document.getElementById('nudge');
 const contentArea = document.getElementById('contentArea');
-const sidePane = document.getElementById('sidePane');
 const spClose = document.getElementById('spClose');
 const spAiResponse = document.getElementById('spAiResponse');
 const spSuggestions = document.getElementById('spSuggestions');
-const pageBaidu = document.getElementById('pageBaidu');
-const pageMedium = document.getElementById('pageMedium');
+const pageFrame = document.getElementById('pageFrame');
+const ntpPage = document.getElementById('ntpPage');
+const ntpSearchInput = document.getElementById('ntpSearchInput');
 const navBack = document.querySelector('.nav-back');
 const navForward = document.querySelector('.nav-forward');
+const tabCountEl = document.getElementById('tabCount');
 
+// ===== Tab State =====
+let tabs = [];
+let activeTabId = null;
+let nextTabId = 1;
 let currentStep = 1;
 
-// ===== Navigation: pages in order =====
-const pages = ['baidu.com', 'medium.com'];
-let pageIndex = 0; // 0 = baidu, 1 = medium
+// ===== Tab CRUD =====
 
-function updateNavButtons() {
-  navBack.classList.toggle('disabled', pageIndex <= 0);
-  navForward.classList.toggle('disabled', pageIndex >= pages.length - 1);
+function createTab(url = null, title = 'New Tab') {
+  const tab = {
+    id: nextTabId++,
+    url: url,
+    title: title,
+    favicon: url ? getFaviconClass(url) : 'tab-favicon-edge',
+  };
+  tabs.push(tab);
+  switchToTab(tab.id);
+  renderTabs();
+  return tab;
 }
 
-// Forward → go to medium.com
-navForward.addEventListener('click', () => {
-  if (pageIndex >= pages.length - 1) return;
-  pageIndex++;
-  navigateToPage(pages[pageIndex]);
-});
+function closeTab(id) {
+  const idx = tabs.findIndex(t => t.id === id);
+  if (idx === -1) return;
 
-// Back → go to baidu.com
-navBack.addEventListener('click', () => {
-  if (pageIndex <= 0) return;
-  pageIndex--;
-  navigateToPage(pages[pageIndex]);
-});
+  tabs.splice(idx, 1);
 
-function navigateToPage(url) {
-  if (url.includes('medium')) {
-    showMedium();
+  if (tabs.length === 0) {
+    // Last tab closed — create a new blank tab
+    createTab();
+    return;
+  }
+
+  if (activeTabId === id) {
+    // Switch to neighbor
+    const newIdx = Math.min(idx, tabs.length - 1);
+    switchToTab(tabs[newIdx].id);
+  }
+
+  renderTabs();
+}
+
+function switchToTab(id) {
+  activeTabId = id;
+  const tab = tabs.find(t => t.id === id);
+  if (!tab) return;
+
+  if (tab.url) {
+    // Show webview
+    ntpPage.classList.remove('visible');
+    pageFrame.style.display = 'flex';
+    if (pageFrame.src !== tab.url && pageFrame.getURL && pageFrame.getURL() !== tab.url) {
+      pageFrame.src = tab.url;
+    } else if (!pageFrame.getURL) {
+      pageFrame.src = tab.url;
+    }
+    omniInput.value = getDisplayUrl(tab.url);
+    currentStep = 2;
+    nudge.classList.remove('hidden', 'pressed');
+    nudge.classList.add('expanded');
+    // Show omni box on web pages
+    document.querySelector('.omni-box').classList.remove('omni-hidden');
   } else {
-    showBaidu();
+    // Show NTP
+    ntpPage.classList.add('visible');
+    pageFrame.style.display = 'none';
+    omniInput.value = '';
+    currentStep = 1;
+    nudge.classList.remove('expanded', 'hidden', 'pressed');
+    // Visually hide omni box on NTP (still takes up space)
+    document.querySelector('.omni-box').classList.add('omni-hidden');
   }
-  updateNavButtons();
-}
 
-function showBaidu() {
-  currentStep = 1;
-  omniInput.value = 'baidu.com';
-  pageBaidu.style.display = 'flex';
-  pageMedium.style.display = 'none';
-
-  // Reset nudge to default
-  nudge.classList.remove('expanded', 'hidden', 'pressed');
-
-  // Close side pane if open
+  // Close side pane when switching tabs
   if (contentArea.classList.contains('pane-open')) {
     contentArea.classList.remove('pane-open');
+    nudge.classList.remove('pressed');
+  }
+
+  renderTabs();
+}
+
+function getFaviconClass(url) {
+  if (!url) return 'tab-favicon-edge';
+  if (url.includes('baidu')) return 'tab-favicon-baidu';
+  if (url.includes('medium')) return 'tab-favicon-medium';
+  if (url.includes('youtube')) return 'tab-favicon-youtube';
+  if (url.includes('github')) return 'tab-favicon-github';
+  return 'tab-favicon-edge';
+}
+
+function getDisplayUrl(url) {
+  if (!url) return '';
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return url;
   }
 }
 
-function showMedium() {
+// ===== Tab Bar Rendering =====
+
+function renderTabs() {
+  tabBar.innerHTML = '';
+
+  tabs.forEach((tab, i) => {
+    // Divider before non-first tabs (skip if previous is active or this is active)
+    if (i > 0 && tabs[i-1].id !== activeTabId && tab.id !== activeTabId) {
+      const divider = document.createElement('div');
+      divider.className = 'tab-divider';
+      tabBar.appendChild(divider);
+    }
+
+    const el = document.createElement('div');
+    el.className = 'tab' + (tab.id === activeTabId ? ' active' : '');
+    el.dataset.tabId = tab.id;
+    el.draggable = true;
+
+    el.innerHTML = `
+      <div class="tab-favicon ${tab.favicon}"></div>
+      <span class="tab-title">${tab.title}</span>
+      <button class="tab-close">&times;</button>
+      ${tab.id === activeTabId ? '<div class="tab-wing-left"></div><div class="tab-wing-right"></div>' : ''}
+    `;
+
+    // Click to switch
+    el.addEventListener('click', (e) => {
+      if (e.target.classList.contains('tab-close')) return;
+      switchToTab(tab.id);
+    });
+
+    // Close button
+    el.querySelector('.tab-close').addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeTab(tab.id);
+    });
+
+    // Drag events
+    el.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', tab.id.toString());
+      el.classList.add('dragging');
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      document.querySelectorAll('.tab.drag-over').forEach(t => t.classList.remove('drag-over'));
+    });
+    el.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      el.classList.add('drag-over');
+    });
+    el.addEventListener('dragleave', () => {
+      el.classList.remove('drag-over');
+    });
+    el.addEventListener('drop', (e) => {
+      e.preventDefault();
+      el.classList.remove('drag-over');
+      const draggedId = parseInt(e.dataTransfer.getData('text/plain'));
+      reorderTab(draggedId, tab.id);
+    });
+
+    tabBar.appendChild(el);
+  });
+
+  // + Add button
+  const addBtn = document.createElement('button');
+  addBtn.className = 'tab-add-btn';
+  addBtn.innerHTML = '<svg viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+  addBtn.addEventListener('click', () => createTab());
+  tabBar.appendChild(addBtn);
+
+  // Update tab count
+  tabCountEl.textContent = tabs.length;
+}
+
+function reorderTab(draggedId, targetId) {
+  const draggedIdx = tabs.findIndex(t => t.id === draggedId);
+  const targetIdx = tabs.findIndex(t => t.id === targetId);
+  if (draggedIdx === -1 || targetIdx === -1 || draggedIdx === targetIdx) return;
+
+  const [dragged] = tabs.splice(draggedIdx, 1);
+  tabs.splice(targetIdx, 0, dragged);
+  renderTabs();
+}
+
+// ===== Webview Navigation Sync =====
+if (pageFrame.addEventListener) {
+  pageFrame.addEventListener('did-navigate', (e) => {
+    const tab = tabs.find(t => t.id === activeTabId);
+    if (tab) {
+      tab.url = e.url;
+      tab.favicon = getFaviconClass(e.url);
+      omniInput.value = getDisplayUrl(e.url);
+    }
+  });
+
+  pageFrame.addEventListener('page-title-updated', (e) => {
+    const tab = tabs.find(t => t.id === activeTabId);
+    if (tab && e.title) {
+      tab.title = e.title;
+      renderTabs();
+    }
+  });
+}
+
+// ===== URL Navigation =====
+
+function navigateCurrentTab(url) {
+  if (!url.startsWith('http')) url = 'https://' + url;
+  const tab = tabs.find(t => t.id === activeTabId);
+  if (tab) {
+    tab.url = url;
+    tab.title = getDisplayUrl(url);
+    tab.favicon = getFaviconClass(url);
+  }
+  ntpPage.classList.remove('visible');
+  pageFrame.style.display = 'flex';
+  pageFrame.src = url;
+  omniInput.value = getDisplayUrl(url);
+  document.querySelector('.omni-box').classList.remove('omni-hidden');
   currentStep = 2;
-  omniInput.value = 'medium.com';
-  pageBaidu.style.display = 'none';
-  pageMedium.style.display = 'block';
-
-  // Close side pane if open
-  if (contentArea.classList.contains('pane-open')) {
-    contentArea.classList.remove('pane-open');
-  }
-
-  // Reset pressed, expand nudge
   nudge.classList.remove('hidden', 'pressed');
   nudge.classList.add('expanded');
+  nudgeWrap.style.width = longWidth + 'px';
+  renderTabs();
 }
 
-// ===== Omni box: URL input =====
-
-omniInput.addEventListener('focus', () => {
-  omniInput.select();
-});
-
+// Omnibox
+omniInput.addEventListener('focus', () => omniInput.select());
 omniInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault();
-    const url = omniInput.value.trim().toLowerCase();
+    const input = omniInput.value.trim();
     omniInput.blur();
-
-    if (url.includes('medium')) {
-      pageIndex = 1;
-      showMedium();
-    } else {
-      pageIndex = 0;
-      showBaidu();
-    }
-    updateNavButtons();
+    if (input) navigateCurrentTab(input);
   }
 });
 
-// ===== Step 3: Click Nudge → Open Side Pane =====
+// NTP search
+ntpSearchInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const query = ntpSearchInput.value.trim();
+    if (query) {
+      const url = query.includes('.') && !query.includes(' ')
+        ? 'https://' + query
+        : 'https://www.bing.com/search?q=' + encodeURIComponent(query);
+      navigateCurrentTab(url);
+      ntpSearchInput.value = '';
+    }
+  }
+});
+
+// NTP top sites
+document.querySelectorAll('.ntp-site[data-url]').forEach(site => {
+  site.addEventListener('click', () => {
+    navigateCurrentTab(site.dataset.url);
+  });
+});
+
+// Nav buttons — use webview's built-in navigation
+navBack.addEventListener('click', () => {
+  if (pageFrame.canGoBack && pageFrame.canGoBack()) pageFrame.goBack();
+});
+navForward.addEventListener('click', () => {
+  if (pageFrame.canGoForward && pageFrame.canGoForward()) pageFrame.goForward();
+});
+
+// ===== Copilot Side Pane =====
 
 let hasChattedBefore = false;
 
 nudge.addEventListener('click', () => {
   if (currentStep === 3) {
-    // Side pane is open, close it
     closeSidePane();
     return;
   }
-
-  if (currentStep === 2) {
-    transitionToStep3();
-  } else if (currentStep === 1) {
-    transitionToStep3Generic();
-  }
+  if (currentStep === 2) transitionToStep3();
+  else if (currentStep === 1) transitionToStep3Generic();
 });
 
 function transitionToStep3() {
   currentStep = 3;
-
-  // Nudge shrinks back to "Chat" state + pressed look
   nudge.classList.remove('expanded');
   nudge.classList.add('pressed');
   nudgeWrap.style.width = shortWidth + 'px';
 
-  // Open side pane
   contentArea.classList.add('pane-open');
-
-  // Restore user message if hidden
   document.querySelector('.sp-msg-user').style.display = '';
 
   if (!hasChattedBefore) {
-    // First time: start typing animation
     spAiResponse.innerHTML = '<span class="sp-cursor"></span>';
     spSuggestions.classList.remove('visible');
-
-    setTimeout(() => {
-      typeAIResponse();
-    }, 600);
-
+    setTimeout(() => typeAIResponse(), 600);
     hasChattedBefore = true;
   }
-  // Otherwise: just reopen, chat history is preserved
 }
 
-// Open side pane from baidu (generic chat)
 function transitionToStep3Generic() {
   currentStep = 3;
-
-  // Nudge stays as "Chat" + pressed look
   nudge.classList.add('pressed');
-
-  // Open side pane
   contentArea.classList.add('pane-open');
-
-  // Show greeting message
-  const userMsg = document.querySelector('.sp-msg-user');
-  userMsg.style.display = 'none';
+  document.querySelector('.sp-msg-user').style.display = 'none';
   spAiResponse.innerHTML = 'How can I help you today?';
   spSuggestions.classList.remove('visible');
 }
 
-// ===== Close Side Pane =====
-
-spClose.addEventListener('click', () => {
-  closeSidePane();
-});
+spClose.addEventListener('click', () => closeSidePane());
 
 function closeSidePane() {
   contentArea.classList.remove('pane-open');
   nudge.classList.remove('pressed');
-
-  // Nudge stays as "Chat" after closing
-  setTimeout(() => {
-    currentStep = 2;
-  }, 500);
+  setTimeout(() => { currentStep = 2; }, 500);
 }
 
 // ===== AI Typing Animation =====
@@ -221,31 +368,28 @@ function typeAIResponse() {
         currentHTML += aiResponseText[charIndex];
         charIndex++;
       }
-
       spAiResponse.innerHTML = currentHTML + '<span class="sp-cursor"></span>';
       document.getElementById('spChat').scrollTop = document.getElementById('spChat').scrollHeight;
       setTimeout(type, speed);
     } else {
       spAiResponse.innerHTML = currentHTML;
-      setTimeout(() => {
-        spSuggestions.classList.add('visible');
-      }, 300);
+      setTimeout(() => { spSuggestions.classList.add('visible'); }, 300);
     }
   }
-
   type();
 }
 
 // ===== Init =====
-document.querySelector('.toolbar-avatar').textContent = 'C';
-updateNavButtons();
 
-// Measure nudge text widths and set initial width
+// Measure nudge text widths BEFORE creating tabs
 const nudgeWrap = document.querySelector('.nudge-text-wrap');
 const nudgeShort = document.querySelector('.nudge-text-short');
 const nudgeLong = document.querySelector('.nudge-text-long');
 
-// Measure widths (temporarily make long text visible to measure)
+// Temporarily remove overflow and make texts static to measure true widths
+nudgeWrap.style.overflow = 'visible';
+nudgeWrap.style.width = 'auto';
+
 nudgeLong.style.opacity = '1';
 nudgeLong.style.position = 'static';
 const longWidth = nudgeLong.offsetWidth;
@@ -256,19 +400,19 @@ nudgeShort.style.position = 'static';
 const shortWidth = nudgeShort.offsetWidth;
 nudgeShort.style.position = '';
 
-// Set initial width
+// Restore overflow
+nudgeWrap.style.overflow = '';
 nudgeWrap.style.width = shortWidth + 'px';
 
-// Override showBaidu/showMedium to also animate wrap width
-const _origShowBaidu = showBaidu;
-const _origShowMedium = showMedium;
-
-showBaidu = function() {
-  _origShowBaidu();
-  nudgeWrap.style.width = shortWidth + 'px';
+// Override switchToTab to also animate nudge wrap width
+const _origSwitchToTab = switchToTab;
+switchToTab = function(id) {
+  _origSwitchToTab(id);
+  const tab = tabs.find(t => t.id === id);
+  nudgeWrap.style.width = (tab && tab.url) ? longWidth + 'px' : shortWidth + 'px';
 };
 
-showMedium = function() {
-  _origShowMedium();
-  nudgeWrap.style.width = longWidth + 'px';
-};
+// Create initial tabs
+createTab('https://www.baidu.com', 'Baidu');
+createTab('https://medium.com/@myscale/agentic-ai-vs-generative-ai-understanding-the-key-differences-e3607e750a20', 'Agentic AI vs Generative AI');
+createTab(null, 'New Tab');

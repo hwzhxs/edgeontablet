@@ -30,6 +30,10 @@
 .tab-favicon-ppt { background: #D04423; }
 .tab-favicon-pdf { background: #C4281C; }
 .tab-favicon-edge { background: #0078D4; }
+.tab-favicon-baidu { background: #2932E1; }
+.tab-favicon-medium { background: #000; }
+.tab-favicon-youtube { background: #FF0000; }
+.tab-favicon-github { background: #24292e; }
 
 .tab-title {
   font-family: 'SF Pro Text', -apple-system, sans-serif;
@@ -165,4 +169,13 @@
 .tab-add-btn svg {
   width: 20px;
   height: 20px;
+}
+
+/* Drag and drop */
+.tab.dragging {
+  opacity: 0.4;
+}
+
+.tab.drag-over {
+  border-left: 2px solid #0078D4;
 }

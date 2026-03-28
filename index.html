@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="css/header.css">
 <link rel="stylesheet" href="css/tabs.css">
 <link rel="stylesheet" href="css/content.css">
+<link rel="stylesheet" href="css/ntp.css">
 <link rel="stylesheet" href="css/sidepane.css">
 <link rel="stylesheet" href="css/nudge.css">
 </head>
@@ -34,30 +35,8 @@
       </div>
     </div>
 
-    <!-- Tab Bar -->
-    <div class="tab-bar">
-      <div class="tab" data-tab="1">
-        <div class="tab-favicon tab-favicon-ppt"></div>
-        <span class="tab-title">The Economics of Generative AI</span>
-        <button class="tab-close">&times;</button>
-      </div>
-      <div class="tab-divider"></div>
-      <div class="tab" data-tab="2">
-        <div class="tab-favicon tab-favicon-pdf"></div>
-        <span class="tab-title">Generation Z and its implications for companies</span>
-        <button class="tab-close">&times;</button>
-      </div>
-      <div class="tab active" data-tab="3">
-        <div class="tab-favicon tab-favicon-edge"></div>
-        <span class="tab-title">Agentic AI vs Generative AI: Under</span>
-        <button class="tab-close">&times;</button>
-        <div class="tab-wing-left"></div>
-        <div class="tab-wing-right"></div>
-      </div>
-      <button class="tab-add-btn">
-        <svg viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      </button>
-    </div>
+    <!-- Tab Bar (rendered by JS) -->
+    <div class="tab-bar" id="tabBar"></div>
 
     <!-- Shadow separator -->
     <div class="header-shadow"></div>
@@ -65,12 +44,8 @@
     <!-- Toolbar -->
     <div class="toolbar">
       <div class="toolbar-inner">
-        <!-- Avatar -->
-        <div class="toolbar-avatar">
-          <img src="assets/avatar.svg" alt="User">
-        </div>
+        <div class="toolbar-avatar">C</div>
 
-        <!-- Nav arrows -->
         <button class="toolbar-btn nav-back">
           <svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
@@ -78,17 +53,16 @@
           <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
 
-        <!-- Omni box -->
         <div class="omni-box">
           <div class="omni-center">
-            <input type="text" class="omni-input" id="omniInput" value="baidu.com" spellcheck="false" autocomplete="off">
+            <svg class="omni-lock" viewBox="0 0 14 16" fill="none"><rect x="1.5" y="7" width="11" height="8" rx="2" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M4 7V5a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
+            <input type="text" class="omni-input" id="omniInput" value="" spellcheck="false" autocomplete="off">
           </div>
           <button class="omni-refresh">
             <svg viewBox="0 0 24 24" fill="none"><path d="M12 4.5C7.86 4.5 4.5 7.86 4.5 12s3.36 7.5 7.5 7.5 7.5-3.36 7.5-7.5c0-.38-.03-.75-.08-1.11-.07-.45.26-.89.72-.89.37 0 .7.26.75.62.07.45.1.91.1 1.38 0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c2.3 0 4.41.87 6 2.29V4.25c0-.41.34-.75.75-.75s.75.34.75.75V7.25c0 .41-.34.75-.75.75H15.75c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h1.35C15.76 5.26 13.97 4.5 12 4.5z" fill="currentColor"/></svg>
           </button>
         </div>
 
-        <!-- Right toolbar icons -->
         <div class="toolbar-right">
           <button class="toolbar-btn btn-share">
             <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12M5 10l7-7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 17v2a2 2 0 002 2h10a2 2 0 002-2v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -96,9 +70,9 @@
           <button class="toolbar-btn btn-star">
             <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l2.8 5.7 6.3.9-4.6 4.5 1.1 6.3L12 16.3l-5.6 3.1 1.1-6.3L3 8.6l6.3-.9L12 2z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/></svg>
           </button>
-          <button class="toolbar-btn btn-tabs">
+          <button class="toolbar-btn btn-tabs" id="btnTabCount">
             <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="17" height="17" rx="3" stroke="currentColor" stroke-width="1.6"/></svg>
-            <span class="toolbar-tab-count">3</span>
+            <span class="toolbar-tab-count" id="tabCount">0</span>
           </button>
           <button class="toolbar-btn btn-menu">
             <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -121,53 +95,93 @@
 
   <!-- ===== CONTENT AREA ===== -->
   <div class="content-area" id="contentArea">
-    <!-- Web page content -->
     <div class="page-content" id="pageContent">
-      <div class="page-baidu" id="pageBaidu">
-        <div class="baidu-logo">
-          <span class="baidu-text">百度</span>
-        </div>
-        <div class="baidu-search">
-          <input type="text" placeholder="百度一下，你就知道" readonly>
-          <button class="baidu-btn">百度一下</button>
-        </div>
-      </div>
-      <div class="page-medium" id="pageMedium" style="display:none">
-        <div class="medium-header">
-          <div class="medium-logo">Medium</div>
-        </div>
-        <article class="medium-article">
-          <h1>Agentic AI vs Generative AI: Understanding the Key Differences</h1>
-          <div class="medium-meta">
-            <span class="medium-author">MyScale</span>
-            <span class="medium-date">· Jun 8, 2024</span>
-            <span class="medium-read">· 12 min read</span>
+      <!-- NTP: Copilot New Tab Page -->
+      <div class="ntp" id="ntpPage">
+        <div class="ntp-content">
+          <!-- Greeting -->
+          <div class="ntp-greeting">Hi, ask me anything or let's find it online</div>
+
+          <!-- Composer + QuickLinks -->
+          <div class="ntp-composer-wrap">
+            <!-- Composer -->
+            <div class="ntp-composer-outer">
+              <div class="ntp-composer-inner">
+                <div class="ntp-composer-input-wrap">
+                  <input type="text" class="ntp-composer-input" id="ntpSearchInput" placeholder="Ask me anything...">
+                </div>
+                <div class="ntp-composer-controls">
+                  <div class="ntp-composer-controls-group">
+                    <!-- Add button with circle border -->
+                    <button class="ntp-composer-btn ntp-btn-circle" title="Add">
+                      <svg viewBox="0 0 20 20" fill="none"><path d="M10 5v10M5 10h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    </button>
+                    <!-- Smart dropdown with pill border -->
+                    <button class="ntp-composer-btn ntp-btn-pill" title="Smart">
+                      <span class="ntp-btn-pill-text">Smart</span>
+                      <svg viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                  </div>
+                  <div class="ntp-composer-controls-group">
+                    <!-- Voice / sound wave button -->
+                    <button class="ntp-composer-btn ntp-btn-voice" title="Voice">
+                      <svg viewBox="0 0 16 18" fill="none"><path d="M2 7v4M5 4v10M8 1v16M11 4v10M14 7v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- QuickLinks -->
+            <div class="ntp-topsites">
+              <div class="ntp-site" data-url="https://www.youtube.com">
+                <div class="ntp-site-logo">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M23.5 6.5a3 3 0 00-2.1-2.1C19.5 4 12 4 12 4s-7.5 0-9.4.4A3 3 0 00.5 6.5 31 31 0 000 12a31 31 0 00.5 5.5 3 3 0 002.1 2.1c1.9.4 9.4.4 9.4.4s7.5 0 9.4-.4a3 3 0 002.1-2.1A31 31 0 0024 12a31 31 0 00-.5-5.5z" fill="#FF0000"/><path d="M9.75 15.02l6.25-3.52-6.25-3.52v7.04z" fill="#FFF"/></svg>
+                </div>
+                <span class="ntp-site-title">YouTube</span>
+              </div>
+              <div class="ntp-site" data-url="https://www.office.com">
+                <div class="ntp-site-logo">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M8 2l8 2v16l-8 2V2z" fill="#EB3C00"/><path d="M16 4l4 1v14l-4 1V4z" fill="#FF6D00"/><path d="M8 2L2 4v16l6 2V2z" fill="#D83B01"/></svg>
+                </div>
+                <span class="ntp-site-title">Microsoft 365</span>
+              </div>
+              <div class="ntp-site" data-url="https://www.facebook.com">
+                <div class="ntp-site-logo">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078V12h3.047V9.356c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.926-1.956 1.874V12h3.328l-.532 3.469h-2.796v8.385C19.612 22.954 24 17.99 24 12z" fill="#1877F2"/></svg>
+                </div>
+                <span class="ntp-site-title">Facebook</span>
+              </div>
+              <div class="ntp-site" data-url="https://web.whatsapp.com">
+                <div class="ntp-site-logo">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01a1.09 1.09 0 00-.79.372c-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.002a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.999-3.648-.235-.374a9.86 9.86 0 01-1.511-5.26c.001-5.45 4.436-9.884 9.889-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884z" fill="#25D366"/></svg>
+                </div>
+                <span class="ntp-site-title">WhatsApp</span>
+              </div>
+              <div class="ntp-site" data-url="https://outlook.live.com">
+                <div class="ntp-site-logo">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L2 6v12l10 4 10-4V6L12 2z" fill="#0078D4"/><path d="M12 2L2 6v12l10-4V2z" fill="#0364B8"/><path d="M12 14L2 18l10 4V14z" fill="#28A8EA"/></svg>
+                </div>
+                <span class="ntp-site-title">Outlook</span>
+              </div>
+              <div class="ntp-site ntp-site-add">
+                <div class="ntp-site-logo">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <span class="ntp-site-title">Add</span>
+              </div>
+            </div>
           </div>
-          <p>Artificial Intelligence (AI) has evolved significantly over the past few decades, leading to the development of various specialized forms. Two of the most discussed types in recent times are <strong>Agentic AI</strong> and <strong>Generative AI</strong>. While both fall under the broad umbrella of AI, they serve different purposes and operate in distinct ways.</p>
-          <h2>What is Agentic AI?</h2>
-          <p>Agentic AI refers to AI systems that can make decisions and take actions autonomously to achieve specific goals. Unlike traditional AI, which follows predefined rules, Agentic AI is proactive — it can adapt to changing situations and handle complex tasks that require ongoing problem-solving and decision-making.</p>
-          <h2>What is Generative AI?</h2>
-          <p>Generative AI focuses on creating new content, such as text, images, music, or video. It is reactive, responding to input based on learned patterns, but it cannot make its own decisions or adapt to new situations independently.</p>
-          <h2>Key Differences</h2>
-          <table>
-            <thead><tr><th>Aspect</th><th>Agentic AI</th><th>Generative AI</th></tr></thead>
-            <tbody>
-              <tr><td>Autonomy</td><td>High — makes independent decisions</td><td>Low — responds to prompts</td></tr>
-              <tr><td>Behavior</td><td>Goal-directed, proactive</td><td>Task-oriented, reactive</td></tr>
-              <tr><td>Adaptation</td><td>Real-time learning</td><td>No real-time adaptation</td></tr>
-              <tr><td>Decision Making</td><td>Complex, multi-step</td><td>Basic, pattern-based</td></tr>
-            </tbody>
-          </table>
-          <h2>Case Study</h2>
-          <p>The article includes a case study demonstrating how Agentic AI outperforms traditional methods in coding tasks by using an iterative, step-by-step approach, continuously refining its output based on feedback and changing requirements.</p>
-        </article>
+        </div>
       </div>
+
+      <!-- Webview: shown when tab has a URL -->
+      <webview id="pageFrame" class="page-frame" src="about:blank" allowpopups style="display:none"></webview>
     </div>
 
     <!-- Copilot Side Pane -->
     <div class="side-pane" id="sidePane">
       <div class="side-pane-inner">
-        <!-- Side Pane Header -->
         <div class="sp-header">
           <div class="sp-header-left"></div>
           <div class="sp-header-center">
@@ -178,27 +192,19 @@
             <svg viewBox="0 0 24 24" fill="none"><path d="M6.4 18L5 16.6 10.6 11 5 5.4 6.4 4 12 9.6 17.6 4 19 5.4 13.4 11 19 16.6 17.6 18 12 12.4z" fill="currentColor"/></svg>
           </button>
         </div>
-
-        <!-- Chat messages -->
         <div class="sp-chat" id="spChat">
-          <!-- User message -->
           <div class="sp-msg sp-msg-user">
             <div class="sp-msg-bubble">summarize this webpage</div>
           </div>
-          <!-- AI response (typed in by JS) -->
           <div class="sp-msg sp-msg-ai">
             <div class="sp-msg-content" id="spAiResponse"></div>
           </div>
         </div>
-
-        <!-- Suggested follow-ups -->
         <div class="sp-suggestions" id="spSuggestions">
           <button class="sp-chip">How can I amplify my voice?</button>
           <button class="sp-chip">What confidence-building tips can I apply?</button>
           <button class="sp-chip">How can I practice visualization exercises?</button>
         </div>
-
-        <!-- Composer -->
         <div class="sp-composer">
           <div class="sp-composer-inner">
             <div class="sp-composer-left">

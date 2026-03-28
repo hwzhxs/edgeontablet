@@ -13,20 +13,17 @@ body {
   min-height: 100vh;
   font-family: -apple-system, 'SF Pro Text', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow: hidden;
 }
 
 .ipad-frame {
-  width: 1366px;
-  height: 1024px;
+  width: 100vw;
+  height: 100vh;
   background: #fff;
-  border-radius: 16px;
-  border: 1px solid rgba(0,0,0,0.18);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
-  transform: scale(0.75);
-  transform-origin: center center;
 }
 
 /* ===== Home Indicator ===== */
@@ -40,6 +37,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
 }
 
 .home-indicator-bar {

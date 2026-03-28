@@ -1,0 +1,292 @@
+/* ===== New Tab Page (NTP) — C1 Browser UC Figma Spec ===== */
+
+.ntp {
+  width: 100%;
+  height: 100%;
+  display: none;
+  position: relative;
+  overflow: hidden;
+  /* Figma: web content fill = #F8F4F1 */
+  background: #F8F4F1;
+}
+
+.ntp.visible {
+  display: block;
+}
+
+/* Content wrapper — Figma: x=576, y=300 in 1912×988 content area */
+.ntp-content {
+  position: absolute;
+  left: 50%;
+  top: 210px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Figma: Greeting+Composer gap = 40px (layout_GCA5HS) */
+  gap: 40px;
+  /* Figma: composer width = 760px */
+  width: 760px;
+}
+
+/* ===== Greeting =====
+   Figma: Heading/2XL Display — Ginto Copilot Variable, 480, 28px, lh 1.143, ls -1%
+   color #272320, text-align center, text-shadow Shadow/XS */
+.ntp-greeting {
+  font-family: 'Segoe UI Variable', -apple-system, sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.143em;
+  letter-spacing: -0.01em;
+  color: #272320;
+  text-align: center;
+  text-shadow: 0px 0px 1px rgba(0,0,0,0.08), 0px 1px 2px rgba(0,0,0,0.05);
+  padding: 0 32px;
+}
+
+/* ===== Composer + Top Sites wrapper =====
+   Figma: column, align center, fill width (layout_ODBJ37) */
+.ntp-composer-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* ===== Composer Outer Container =====
+   Figma: bg Color/Background/Acrylic/Thin = rgba(250,244,239,0.6) + rgba(240,234,229,0.8)
+   border: rgba(255,255,255,0.9) 1px, radius 32px, padding 6px
+   shadow: 0 16px 48px rgba(248,188,140,0.18), 0 16px 24px rgba(0,0,0,0.1)
+   backdrop-filter: blur(60px) */
+.ntp-composer-outer {
+  width: 100%;
+  padding: 6px;
+  background: rgba(245,239,234,0.7);
+  border: 1px solid rgba(255,255,255,0.9);
+  border-radius: 32px;
+  backdrop-filter: blur(60px);
+  -webkit-backdrop-filter: blur(60px);
+  box-shadow:
+    0px 16px 48px 0px rgba(248,188,140,0.18),
+    0px 16px 24px 0px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gradient overlay — Figma: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 100%) */
+.ntp-composer-outer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 32px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
+}
+
+/* ===== Composer Inner Container =====
+   Figma: bg rgba(255,255,255,0.9), border gradient white→transparent, radius 26px */
+.ntp-composer-inner {
+  position: relative;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(255,255,255,1);
+  border-image: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 80%) 1;
+  border-radius: 26px;
+  overflow: hidden;
+}
+
+/* Simpler border approach since border-image breaks border-radius */
+.ntp-composer-inner {
+  border: none;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8);
+}
+
+/* ===== Input Area =====
+   Figma: padding 10px 8px, text area padding 4px 8px */
+.ntp-composer-input-wrap {
+  padding: 10px 8px;
+}
+
+.ntp-composer-input {
+  width: 100%;
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  font-family: 'Segoe UI Variable', -apple-system, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5em;
+  color: #272320;
+  outline: none;
+}
+
+.ntp-composer-input::placeholder {
+  color: rgba(39,35,32,0.5);
+}
+
+/* ===== Composer Controls =====
+   Figma: row, space-between, padding 0 10px 10px */
+.ntp-composer-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px 10px;
+}
+
+.ntp-composer-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Figma: padding 0 6px, hug content, transparent bg */
+.ntp-composer-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #272320;
+  padding: 0 6px;
+  height: 36px;
+}
+
+.ntp-composer-btn:hover {
+  background: rgba(0,0,0,0.04);
+}
+
+.ntp-composer-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Create button (Add) — Figma: radius 9999px, border rgba(0,0,0,0.08) 1px, icon 17.5×17.5 */
+.ntp-btn-circle {
+  width: 36px;
+  padding: 0;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 9999px;
+}
+
+.ntp-btn-circle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Smart dropdown — Figma: radius 16px, border rgba(0,0,0,0.08) 1px, text 14px 410 */
+.ntp-btn-pill {
+  width: auto;
+  padding: 0 6px;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 16px;
+  gap: 2px;
+}
+
+.ntp-btn-pill-text {
+  font-family: 'Segoe UI Variable', -apple-system, sans-serif;
+  font-weight: 410;
+  font-size: 14px;
+  line-height: 1.429;
+  color: #272320;
+  padding: 0 4px;
+}
+
+/* Chevron inside Smart — Figma: 8×4.5, padding 2px */
+.ntp-btn-pill svg {
+  width: 8px;
+  height: 5px;
+  padding: 0;
+  margin-right: 2px;
+}
+
+/* Mic/Voice button — Figma: 36×36, icon 16×18 */
+.ntp-btn-voice {
+  width: 36px;
+  padding: 0;
+}
+
+.ntp-btn-voice svg {
+  width: 16px;
+  height: 18px;
+}
+
+/* ===== QuickLinks =====
+   Figma: row, center, gap 8px (layout_X4SMWM) */
+.ntp-topsites {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding-top: 24px;
+}
+
+/* ===== Single QuickLink =====
+   Figma: column, center, gap 8px, padding-top 16px (layout_ZD7PGW) */
+.ntp-site {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-top: 16px;
+  cursor: pointer;
+}
+
+.ntp-site:hover .ntp-site-logo {
+  background: #EFEAE7;
+}
+
+/* ===== QuickLink App Icon =====
+   Figma: padding 12px (so 48×48 total), bg #F8F4F1, border rgba(0,0,0,0.08) 1px, radius 20px
+   icon 24×24 inside */
+.ntp-site-logo {
+  width: 48px;
+  height: 48px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F8F4F1;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 20px;
+  transition: background 0.15s;
+  overflow: hidden;
+}
+
+.ntp-site-logo svg,
+.ntp-site-logo img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Letter fallback for icons */
+.ntp-site-logo span {
+  font-family: -apple-system, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #272320;
+}
+
+/* ===== QuickLink Title =====
+   Figma: Ginto Copilot Variable, 450, 12px, lh 1.333, center, #272320, width 88px */
+.ntp-site-title {
+  font-family: 'Segoe UI Variable', -apple-system, sans-serif;
+  font-weight: 450;
+  font-size: 12px;
+  line-height: 1.333em;
+  text-align: center;
+  color: #272320;
+  width: 88px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== Add button special style ===== */
+.ntp-site-add .ntp-site-logo {
+  background: #F8F4F1;
+}
+
+.ntp-site-add .ntp-site-logo svg {
+  color: #272320;
+}

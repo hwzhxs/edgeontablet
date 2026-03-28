@@ -5,7 +5,7 @@
   overflow: hidden;
   transition: width 0.5s cubic-bezier(0.32, 0.72, 0, 1);
   flex-shrink: 0;
-  background: #F4F7FB;
+  background: #F8F4F1;
 }
 
 .content-area.pane-open .side-pane {
@@ -57,7 +57,7 @@
   font-family: 'SF Pro Text', -apple-system, sans-serif;
   font-size: 17px;
   font-weight: 600;
-  color: #242424;
+  color: #272320;
   letter-spacing: -0.025em;
 }
 
@@ -90,7 +90,7 @@
   padding: 20px 16px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
 }
 
 .sp-msg {
@@ -105,14 +105,14 @@
 }
 
 .sp-msg-bubble {
-  background: #FEE5CE;
+  background: #FEE6D4;
   padding: 14px 20px;
-  border-radius: 16px;
+  border-radius: 18px;
   font-family: -apple-system, 'SF Pro Text', sans-serif;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 410;
-  line-height: 1.53;
-  color: #1D1B1A;
+  line-height: 1.625;
+  color: #272320;
 }
 
 /* AI message — left aligned */
@@ -122,10 +122,10 @@
 
 .sp-msg-content {
   font-family: -apple-system, 'SF Pro Text', sans-serif;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 410;
-  line-height: 1.53;
-  color: #33302E;
+  line-height: 1.625;
+  color: #272320;
   max-width: 95%;
 }
 
@@ -150,7 +150,7 @@
   display: inline-block;
   width: 2px;
   height: 18px;
-  background: #33302E;
+  background: #272320;
   margin-left: 2px;
   vertical-align: text-bottom;
   animation: blink 0.8s infinite;
@@ -180,24 +180,23 @@
 }
 
 .sp-chip {
-  padding: 0 10px;
-  height: 40px;
+  padding: 8px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  border: 1px solid #B1AAA6;
+  background: rgba(255,255,255,0.3);
+  border: 1px solid rgba(0,0,0,0.08);
   border-radius: 12px;
   font-family: -apple-system, 'SF Pro Text', sans-serif;
   font-size: 15px;
   font-weight: 410;
-  color: #33302E;
+  color: #272320;
   cursor: pointer;
   transition: background 0.15s;
 }
 
 .sp-chip:hover {
-  background: rgba(0,0,0,0.04);
+  background: rgba(0,0,0,0.03);
 }
 
 /* --- Composer --- */
@@ -262,9 +261,9 @@
 
 .sp-composer-placeholder {
   font-family: -apple-system, 'SF Pro Text', sans-serif;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 410;
-  color: #635D5A;
+  color: #5A544F;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
