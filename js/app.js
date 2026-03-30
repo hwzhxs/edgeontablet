@@ -296,7 +296,9 @@ ntpSearchInput.addEventListener('keydown', (e) => {
 // NTP top sites
 document.querySelectorAll('.ntp-site[data-url]').forEach(site => {
   site.addEventListener('click', () => {
-    navigateCurrentTab(site.dataset.url);
+    const localUrl = site.dataset.urlLocal;
+    const url = (!isElectron && localUrl) ? localUrl : site.dataset.url;
+    navigateCurrentTab(url);
   });
 });
 
