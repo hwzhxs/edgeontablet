@@ -32,6 +32,13 @@
 
 // ===== Environment Detection =====
 const isElectron = new URLSearchParams(window.location.search).has('electron');
+const PROXY_URL = 'https://edge-ipad-proxy.vercel.app/api/proxy?url=';
+
+// Helper: wrap URL through proxy for browser version
+function getFrameUrl(url) {
+  if (isElectron || !url || url.startsWith('pages/')) return url;
+  return PROXY_URL + encodeURIComponent(url);
+}
 
 // ===== DOM =====
 const tabBar = document.getElementById('tabBar');
@@ -113,8 +120,9 @@ function switchToTab(id) {
     // Show page frame (webview in Electron, iframe in browser)
     ntpPage.classList.remove('visible');
     pageFrame.style.display = 'flex';
-    if (pageFrame.src !== tab.url) {
-      pageFrame.src = tab.url;
+    const frameSrc = getFrameUrl(tab.url);
+    if (pageFrame.src !== frameSrc) {
+      pageFrame.src = frameSrc;
     }
     omniInput.value = getDisplayUrl(tab.url);
     currentStep = 2;
@@ -287,7 +295,7 @@ function navigateCurrentTab(url) {
   }
   ntpPage.classList.remove('visible');
   pageFrame.style.display = 'flex';
-  pageFrame.src = url;
+  pageFrame.src = getFrameUrl(url);
   omniInput.value = getDisplayUrl(url);
   document.querySelector('.omni-box').classList.remove('omni-hidden');
   currentStep = 2;
@@ -340,9 +348,7 @@ ntpSearchInput.addEventListener('keydown', (e) => {
 // NTP top sites
 document.querySelectorAll('.ntp-site[data-url]').forEach(site => {
   site.addEventListener('click', () => {
-    const localUrl = site.dataset.urlLocal;
-    const url = (!isElectron && localUrl) ? localUrl : site.dataset.url;
-    navigateCurrentTab(url);
+    navigateCurrentTab(site.dataset.url);
   });
 });
 
@@ -357,7 +363,7 @@ navBack.addEventListener('click', () => {
     tab.url = tab.history[tab.historyIndex];
     tab.title = getDisplayUrl(tab.url);
     tab.favicon = getFaviconClass(tab.url);
-    pageFrame.src = tab.url;
+    pageFrame.src = getFrameUrl(tab.url);
     omniInput.value = getDisplayUrl(tab.url);
     renderTabs();
   } else if (tab.historyIndex === 0) {
@@ -389,7 +395,7 @@ navForward.addEventListener('click', () => {
     tab.favicon = getFaviconClass(tab.url);
     ntpPage.classList.remove('visible');
     pageFrame.style.display = 'flex';
-    pageFrame.src = tab.url;
+    pageFrame.src = getFrameUrl(tab.url);
     omniInput.value = getDisplayUrl(tab.url);
     currentStep = 2;
     nudge.classList.remove('hidden', 'pressed');
