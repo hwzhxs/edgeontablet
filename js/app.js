@@ -44,6 +44,8 @@ function createTab(url = null, title = 'New Tab') {
     url: url,
     title: title,
     favicon: url ? getFaviconClass(url) : 'tab-favicon-edge',
+    history: url ? [url] : [],  // navigation history stack
+    historyIndex: url ? 0 : -1, // current position in history
   };
   tabs.push(tab);
   switchToTab(tab.id);
@@ -240,9 +242,15 @@ if (isElectron && pageFrame.addEventListener) {
 // ===== URL Navigation =====
 
 function navigateCurrentTab(url) {
-  if (!url.startsWith('http')) url = 'https://' + url;
+  if (!url.startsWith('http') && !url.startsWith('pages/')) url = 'https://' + url;
   const tab = tabs.find(t => t.id === activeTabId);
   if (tab) {
+    // Push to history (trim forward history if we navigated back before)
+    if (tab.historyIndex < tab.history.length - 1) {
+      tab.history = tab.history.slice(0, tab.historyIndex + 1);
+    }
+    tab.history.push(url);
+    tab.historyIndex = tab.history.length - 1;
     tab.url = url;
     tab.title = getDisplayUrl(url);
     tab.favicon = getFaviconClass(url);
@@ -292,19 +300,57 @@ document.querySelectorAll('.ntp-site[data-url]').forEach(site => {
   });
 });
 
-// Nav buttons
+// Nav buttons — manage our own history stack to support back-to-NTP
 navBack.addEventListener('click', () => {
-  if (isElectron) {
-    if (pageFrame.canGoBack && pageFrame.canGoBack()) pageFrame.goBack();
-  } else {
-    try { pageFrame.contentWindow.history.back(); } catch(e) {}
+  const tab = tabs.find(t => t.id === activeTabId);
+  if (!tab) return;
+
+  if (tab.historyIndex > 0) {
+    // Go back in history
+    tab.historyIndex--;
+    tab.url = tab.history[tab.historyIndex];
+    tab.title = getDisplayUrl(tab.url);
+    tab.favicon = getFaviconClass(tab.url);
+    pageFrame.src = tab.url;
+    omniInput.value = getDisplayUrl(tab.url);
+    renderTabs();
+  } else if (tab.historyIndex === 0) {
+    // At first page — go back to NTP
+    tab.historyIndex = -1;
+    tab.url = null;
+    tab.title = 'New Tab';
+    tab.favicon = 'tab-favicon-edge';
+    ntpPage.classList.add('visible');
+    pageFrame.style.display = 'none';
+    omniInput.value = '';
+    currentStep = 1;
+    nudge.classList.remove('expanded', 'hidden', 'pressed');
+    nudgeWrap.style.width = shortWidth + 'px';
+    document.querySelector('.omni-box').classList.add('omni-hidden');
+    renderTabs();
   }
 });
+
 navForward.addEventListener('click', () => {
-  if (isElectron) {
-    if (pageFrame.canGoForward && pageFrame.canGoForward()) pageFrame.goForward();
-  } else {
-    try { pageFrame.contentWindow.history.forward(); } catch(e) {}
+  const tab = tabs.find(t => t.id === activeTabId);
+  if (!tab) return;
+
+  if (tab.historyIndex < tab.history.length - 1) {
+    // Go forward in history
+    tab.historyIndex++;
+    tab.url = tab.history[tab.historyIndex];
+    tab.title = getDisplayUrl(tab.url);
+    tab.favicon = getFaviconClass(tab.url);
+    ntpPage.classList.remove('visible');
+    pageFrame.style.display = 'flex';
+    pageFrame.src = tab.url;
+    omniInput.value = getDisplayUrl(tab.url);
+    currentStep = 2;
+    nudge.classList.remove('hidden', 'pressed');
+    nudge.classList.add('expanded');
+    nudgeWrap.style.width = longWidth + 'px';
+    document.querySelector('.omni-box').classList.remove('omni-hidden');
+    renderTabs();
   }
 });
 
