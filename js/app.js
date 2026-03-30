@@ -530,14 +530,7 @@ switchToTab = function(id) {
   nudgeWrap.style.width = (tab && tab.url) ? longWidth + 'px' : shortWidth + 'px';
 };
 
-// Create initial tabs — Electron uses real URLs, browser uses local mock pages
-if (isElectron) {
-  createTab('https://www.baidu.com', 'Baidu');
-  createTab('https://medium.com/@myscale/agentic-ai-vs-generative-ai-understanding-the-key-differences-e3607e750a20', 'Agentic AI vs Generative AI');
-} else {
-  createTab('pages/baidu.html', 'Baidu');
-  createTab('pages/medium-article.html', 'Agentic AI vs Generative AI');
-}
+// Create initial tabs — single New Tab (NTP) on launch
 createTab(null, 'New Tab');
 
 // ===== Settings Panel =====
