@@ -1,7 +1,7 @@
 // ===== Edge iPad Copilot — Tab Management + Side Pane =====
 
 // ===== Environment Detection =====
-const isElectron = typeof process !== 'undefined' && process.versions && process.versions.electron;
+const isElectron = new URLSearchParams(window.location.search).has('electron');
 
 // ===== DOM =====
 const tabBar = document.getElementById('tabBar');

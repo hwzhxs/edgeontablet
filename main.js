@@ -13,7 +13,7 @@ app.whenReady().then(() => {
     },
   });
 
-  win.loadFile('index.html');
+  win.loadFile('index.html', { query: { electron: '1' } });
 });
 
 app.on('window-all-closed', () => app.quit());
