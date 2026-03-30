@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>百度一下，你就知道</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+.logo { margin-bottom: 24px; }
+.logo svg { width: 200px; }
+.search-box { display: flex; align-items: center; width: 540px; max-width: 90vw; }
+.search-input { flex: 1; height: 44px; border: 2px solid #4e6ef2; border-right: none; border-radius: 10px 0 0 10px; padding: 0 16px; font-size: 16px; outline: none; }
+.search-btn { height: 44px; padding: 0 32px; background: #4e6ef2; color: #fff; border: none; border-radius: 0 10px 10px 0; font-size: 16px; cursor: pointer; font-weight: 500; }
+.hot { margin-top: 32px; width: 540px; max-width: 90vw; }
+.hot-title { font-size: 14px; color: #222; font-weight: 600; margin-bottom: 12px; }
+.hot-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.hot-item { padding: 6px 14px; background: #f5f5f6; border-radius: 16px; font-size: 13px; color: #333; cursor: pointer; }
+.hot-item:first-child { color: #fff; background: #f54545; }
+.hot-item:nth-child(2) { color: #f54545; }
+.hot-item:nth-child(3) { color: #ff8547; }
+</style>
+</head>
+<body>
+<div class="logo">
+  <svg viewBox="0 0 200 76"><text x="20" y="55" font-size="52" font-weight="700" fill="#2932e1" font-family="Arial">百度</text></svg>
+</div>
+<div class="search-box">
+  <input type="text" class="search-input" placeholder="搜索一下">
+  <button class="search-btn">百度一下</button>
+</div>
+<div class="hot">
+  <div class="hot-title">百度热搜</div>
+  <div class="hot-list">
+    <div class="hot-item">AI Agent 新突破</div>
+    <div class="hot-item">Agentic AI 发展趋势</div>
+    <div class="hot-item">2026 科技展望</div>
+    <div class="hot-item">iPad 新功能</div>
+    <div class="hot-item">Edge 浏览器更新</div>
+    <div class="hot-item">Copilot 最新动态</div>
+  </div>
+</div>
+</body>
+</html>

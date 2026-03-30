@@ -106,6 +106,9 @@ function getFaviconClass(url) {
 
 function getDisplayUrl(url) {
   if (!url) return '';
+  // Show friendly names for local mock pages
+  if (url.includes('baidu.html')) return 'www.baidu.com';
+  if (url.includes('medium-article.html')) return 'medium.com';
   try {
     return new URL(url).hostname;
   } catch {
@@ -395,6 +398,6 @@ switchToTab = function(id) {
 };
 
 // Create initial tabs
-createTab('https://www.baidu.com', 'Baidu');
-createTab('https://medium.com/@myscale/agentic-ai-vs-generative-ai-understanding-the-key-differences-e3607e750a20', 'Agentic AI vs Generative AI');
+createTab('pages/baidu.html', 'Baidu');
+createTab('pages/medium-article.html', 'Agentic AI vs Generative AI');
 createTab(null, 'New Tab');
