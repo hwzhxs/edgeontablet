@@ -543,7 +543,7 @@ createTab(null, 'New Tab');
 // ===== Settings Panel =====
 const settingsBtn = document.getElementById('ntpSettingsBtn');
 const settingsPanel = document.getElementById('ntpSettingsPanel');
-let nudgeHighlightColor = 'rgba(255,176,0,0.25)';
+let nudgeHighlightColor = 'rgba(0,0,0,0.08)';
 
 // Toggle panel
 settingsBtn.addEventListener('click', (e) => {
