@@ -541,12 +541,19 @@ let nudgeHighlightColor = 'none';
 // Toggle panel
 settingsBtn.addEventListener('click', (e) => {
   e.stopPropagation();
-  settingsPanel.classList.toggle('visible');
+  if (settingsPanel.hidden) {
+    settingsPanel.hidden = false;
+    settingsPanel.classList.add('visible');
+  } else {
+    settingsPanel.hidden = true;
+    settingsPanel.classList.remove('visible');
+  }
 });
 
 // Close panel when clicking outside
 document.addEventListener('click', (e) => {
   if (!settingsPanel.contains(e.target) && e.target !== settingsBtn) {
+    settingsPanel.hidden = true;
     settingsPanel.classList.remove('visible');
   }
 });
