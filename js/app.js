@@ -63,12 +63,10 @@ function switchToTab(id) {
   if (!tab) return;
 
   if (tab.url) {
-    // Show webview
+    // Show iframe
     ntpPage.classList.remove('visible');
     pageFrame.style.display = 'flex';
-    if (pageFrame.src !== tab.url && pageFrame.getURL && pageFrame.getURL() !== tab.url) {
-      pageFrame.src = tab.url;
-    } else if (!pageFrame.getURL) {
+    if (pageFrame.src !== tab.url) {
       pageFrame.src = tab.url;
     }
     omniInput.value = getDisplayUrl(tab.url);
@@ -199,25 +197,9 @@ function reorderTab(draggedId, targetId) {
   renderTabs();
 }
 
-// ===== Webview Navigation Sync =====
-if (pageFrame.addEventListener) {
-  pageFrame.addEventListener('did-navigate', (e) => {
-    const tab = tabs.find(t => t.id === activeTabId);
-    if (tab) {
-      tab.url = e.url;
-      tab.favicon = getFaviconClass(e.url);
-      omniInput.value = getDisplayUrl(e.url);
-    }
-  });
-
-  pageFrame.addEventListener('page-title-updated', (e) => {
-    const tab = tabs.find(t => t.id === activeTabId);
-    if (tab && e.title) {
-      tab.title = e.title;
-      renderTabs();
-    }
-  });
-}
+// ===== Iframe Navigation Sync =====
+// Note: cross-origin iframes cannot report back navigation/title changes
+// due to browser security. This is a limitation of the web version.
 
 // ===== URL Navigation =====
 
@@ -274,12 +256,12 @@ document.querySelectorAll('.ntp-site[data-url]').forEach(site => {
   });
 });
 
-// Nav buttons — use webview's built-in navigation
+// Nav buttons — use browser history (limited for cross-origin iframes)
 navBack.addEventListener('click', () => {
-  if (pageFrame.canGoBack && pageFrame.canGoBack()) pageFrame.goBack();
+  try { pageFrame.contentWindow.history.back(); } catch(e) {}
 });
 navForward.addEventListener('click', () => {
-  if (pageFrame.canGoForward && pageFrame.canGoForward()) pageFrame.goForward();
+  try { pageFrame.contentWindow.history.forward(); } catch(e) {}
 });
 
 // ===== Copilot Side Pane =====
