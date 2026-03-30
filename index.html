@@ -104,7 +104,7 @@
             <span class="ntp-weather-icon">☀️</span>
             <span class="ntp-weather-temp">34°C</span>
           </div>
-          <button class="ntp-settings-btn" title="Customize">
+          <button class="ntp-settings-btn" title="Customize" id="ntpSettingsBtn">
             <svg viewBox="0 0 20 20" fill="none">
               <line x1="3" y1="7" x2="17" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
               <line x1="3" y1="13" x2="17" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -112,6 +112,20 @@
               <circle cx="13" cy="13" r="2" fill="#F8F4F1" stroke="currentColor" stroke-width="1.5"/>
             </svg>
           </button>
+          <!-- Settings Panel -->
+          <div class="ntp-settings-panel" id="ntpSettingsPanel">
+            <div class="ntp-settings-title">Nudge Customization</div>
+            <div class="ntp-settings-row">
+              <label class="ntp-settings-label">Nudge Highlight Color</label>
+              <div class="ntp-settings-colors" id="nudgeColorOptions">
+                <button class="ntp-color-swatch" data-color="rgba(0,0,0,0.05)" style="background:rgba(0,0,0,0.1)" title="Default"></button>
+                <button class="ntp-color-swatch active" data-color="rgba(255,176,0,0.25)" style="background:rgba(255,176,0,0.5)" title="Copilot Gold"></button>
+                <button class="ntp-color-swatch" data-color="rgba(88,64,255,0.18)" style="background:rgba(88,64,255,0.35)" title="Purple"></button>
+                <button class="ntp-color-swatch" data-color="rgba(242,89,138,0.18)" style="background:rgba(242,89,138,0.35)" title="Pink"></button>
+                <button class="ntp-color-swatch" data-color="rgba(0,174,255,0.18)" style="background:rgba(0,174,255,0.35)" title="Cyan"></button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="ntp-content">

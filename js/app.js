@@ -539,3 +539,53 @@ if (isElectron) {
   createTab('pages/medium-article.html', 'Agentic AI vs Generative AI');
 }
 createTab(null, 'New Tab');
+
+// ===== Settings Panel =====
+const settingsBtn = document.getElementById('ntpSettingsBtn');
+const settingsPanel = document.getElementById('ntpSettingsPanel');
+let nudgeHighlightColor = 'rgba(255,176,0,0.25)';
+
+// Toggle panel
+settingsBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  settingsPanel.classList.toggle('visible');
+});
+
+// Close panel when clicking outside
+document.addEventListener('click', (e) => {
+  if (!settingsPanel.contains(e.target) && e.target !== settingsBtn) {
+    settingsPanel.classList.remove('visible');
+  }
+});
+
+// Nudge Highlight Color (Summarize — expanded state only)
+document.querySelectorAll('#nudgeColorOptions .ntp-color-swatch').forEach(swatch => {
+  swatch.addEventListener('click', () => {
+    document.querySelectorAll('#nudgeColorOptions .ntp-color-swatch').forEach(s => s.classList.remove('active'));
+    swatch.classList.add('active');
+    nudgeHighlightColor = swatch.dataset.color;
+    applyNudgeColor();
+  });
+});
+
+// Apply highlight color only when nudge is expanded (Summarize)
+function applyNudgeColor() {
+  if (nudge.classList.contains('expanded')) {
+    nudge.style.background = nudgeHighlightColor;
+  } else {
+    nudge.style.background = '';
+  }
+}
+
+// Watch for class changes on nudge
+const nudgeObserver = new MutationObserver(() => {
+  if (nudge.classList.contains('expanded')) {
+    nudge.style.background = nudgeHighlightColor;
+  } else {
+    nudge.style.background = '';
+  }
+});
+nudgeObserver.observe(nudge, { attributes: true, attributeFilter: ['class'] });
+
+// Apply initial color
+applyNudgeColor();
