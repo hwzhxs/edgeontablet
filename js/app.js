@@ -543,7 +543,7 @@ createTab(null, 'New Tab');
 // ===== Settings Panel =====
 const settingsBtn = document.getElementById('ntpSettingsBtn');
 const settingsPanel = document.getElementById('ntpSettingsPanel');
-let nudgeHighlightColor = 'rgba(0,0,0,0.08)';
+let nudgeHighlightColor = 'none';
 
 // Toggle panel
 settingsBtn.addEventListener('click', (e) => {
@@ -570,19 +570,19 @@ document.querySelectorAll('#nudgeColorOptions .ntp-color-swatch').forEach(swatch
 
 // Apply highlight color only when nudge is expanded (Summarize)
 function applyNudgeColor() {
-  if (nudge.classList.contains('expanded')) {
-    nudge.style.background = nudgeHighlightColor;
-  } else {
+  if (nudgeHighlightColor === 'none' || !nudge.classList.contains('expanded')) {
     nudge.style.background = '';
+  } else {
+    nudge.style.background = nudgeHighlightColor;
   }
 }
 
 // Watch for class changes on nudge
 const nudgeObserver = new MutationObserver(() => {
-  if (nudge.classList.contains('expanded')) {
-    nudge.style.background = nudgeHighlightColor;
-  } else {
+  if (nudgeHighlightColor === 'none' || !nudge.classList.contains('expanded')) {
     nudge.style.background = '';
+  } else {
+    nudge.style.background = nudgeHighlightColor;
   }
 });
 nudgeObserver.observe(nudge, { attributes: true, attributeFilter: ['class'] });
