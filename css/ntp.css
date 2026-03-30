@@ -14,6 +14,55 @@
   display: block;
 }
 
+/* ===== NTP Top Bar: Weather (left) + Settings (right) ===== */
+.ntp-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+}
+
+.ntp-weather {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.ntp-weather-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.ntp-weather-temp {
+  font-family: 'Segoe UI Variable', -apple-system, sans-serif;
+  font-weight: 450;
+  font-size: 14px;
+  color: #272320;
+}
+
+.ntp-settings-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: rgba(39,35,32,0.7);
+  border-radius: 8px;
+}
+
+.ntp-settings-btn:hover {
+  background: rgba(0,0,0,0.04);
+}
+
+.ntp-settings-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
 /* Content wrapper — Figma: x=576, y=300 in 1912×988 content area */
 .ntp-content {
   position: absolute;

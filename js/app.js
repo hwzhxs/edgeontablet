@@ -1,5 +1,35 @@
 // ===== Edge iPad Copilot — Tab Management + Side Pane =====
 
+// ===== Weather (Open-Meteo, Suzhou) =====
+(async function fetchWeather() {
+  const weatherIcons = {
+    0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+    45: '🌫️', 48: '🌫️',
+    51: '🌦️', 53: '🌦️', 55: '🌧️',
+    56: '🌧️', 57: '🌧️',
+    61: '🌧️', 63: '🌧️', 65: '🌧️',
+    66: '🌧️', 67: '🌧️',
+    71: '🌨️', 73: '🌨️', 75: '❄️',
+    77: '❄️',
+    80: '🌦️', 81: '🌧️', 82: '🌧️',
+    85: '🌨️', 86: '🌨️',
+    95: '⛈️', 96: '⛈️', 99: '⛈️',
+  };
+  try {
+    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=31.3&longitude=120.6&current=temperature_2m,weather_code&timezone=Asia/Shanghai');
+    const data = await res.json();
+    const temp = Math.round(data.current.temperature_2m);
+    const code = data.current.weather_code;
+    const icon = weatherIcons[code] || '🌡️';
+    const iconEl = document.querySelector('.ntp-weather-icon');
+    const tempEl = document.querySelector('.ntp-weather-temp');
+    if (iconEl) iconEl.textContent = icon;
+    if (tempEl) tempEl.textContent = temp + '°C';
+  } catch (e) {
+    // Keep default static values on error
+  }
+})();
+
 // ===== Environment Detection =====
 const isElectron = new URLSearchParams(window.location.search).has('electron');
 
@@ -267,8 +297,22 @@ function navigateCurrentTab(url) {
   renderTabs();
 }
 
-// Omnibox
-omniInput.addEventListener('focus', () => omniInput.select());
+// Omnibox — show hostname by default, full URL on focus
+omniInput.addEventListener('focus', () => {
+  const tab = tabs.find(t => t.id === activeTabId);
+  if (tab && tab.url) {
+    omniInput.value = tab.url;
+    omniInput.classList.add('omni-focused');
+  }
+  omniInput.select();
+});
+omniInput.addEventListener('blur', () => {
+  const tab = tabs.find(t => t.id === activeTabId);
+  if (tab && tab.url) {
+    omniInput.value = getDisplayUrl(tab.url);
+  }
+  omniInput.classList.remove('omni-focused');
+});
 omniInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault();
