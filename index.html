@@ -175,8 +175,9 @@
         </div>
       </div>
 
-      <!-- Webview/iframe: shown when tab has a URL -->
-      <iframe id="pageFrame" class="page-frame" src="about:blank" style="display:none; border:none; width:100%; height:100%;" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" referrerpolicy="no-referrer"></iframe>
+      <!-- Webview (Electron) / iframe (browser): shown when tab has a URL -->
+      <webview id="pageFrameWebview" class="page-frame" src="about:blank" allowpopups style="display:none"></webview>
+      <iframe id="pageFrameIframe" class="page-frame" src="about:blank" style="display:none; border:none; width:100%; height:100%;" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" referrerpolicy="no-referrer"></iframe>
     </div>
 
     <!-- Copilot Side Pane -->

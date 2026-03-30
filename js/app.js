@@ -1,5 +1,8 @@
 // ===== Edge iPad Copilot — Tab Management + Side Pane =====
 
+// ===== Environment Detection =====
+const isElectron = typeof process !== 'undefined' && process.versions && process.versions.electron;
+
 // ===== DOM =====
 const tabBar = document.getElementById('tabBar');
 const omniInput = document.getElementById('omniInput');
@@ -8,12 +11,24 @@ const contentArea = document.getElementById('contentArea');
 const spClose = document.getElementById('spClose');
 const spAiResponse = document.getElementById('spAiResponse');
 const spSuggestions = document.getElementById('spSuggestions');
-const pageFrame = document.getElementById('pageFrame');
 const ntpPage = document.getElementById('ntpPage');
 const ntpSearchInput = document.getElementById('ntpSearchInput');
 const navBack = document.querySelector('.nav-back');
 const navForward = document.querySelector('.nav-forward');
 const tabCountEl = document.getElementById('tabCount');
+
+// Pick the right frame element: webview for Electron, iframe for browser
+const pageFrameWebview = document.getElementById('pageFrameWebview');
+const pageFrameIframe = document.getElementById('pageFrameIframe');
+let pageFrame;
+
+if (isElectron) {
+  pageFrame = pageFrameWebview;
+  pageFrameIframe.remove();
+} else {
+  pageFrame = pageFrameIframe;
+  pageFrameWebview.remove();
+}
 
 // ===== Tab State =====
 let tabs = [];
@@ -63,7 +78,7 @@ function switchToTab(id) {
   if (!tab) return;
 
   if (tab.url) {
-    // Show iframe
+    // Show page frame (webview in Electron, iframe in browser)
     ntpPage.classList.remove('visible');
     pageFrame.style.display = 'flex';
     if (pageFrame.src !== tab.url) {
@@ -200,7 +215,25 @@ function reorderTab(draggedId, targetId) {
   renderTabs();
 }
 
-// ===== Iframe Navigation Sync =====
+// ===== Navigation Sync =====
+if (isElectron && pageFrame.addEventListener) {
+  pageFrame.addEventListener('did-navigate', (e) => {
+    const tab = tabs.find(t => t.id === activeTabId);
+    if (tab) {
+      tab.url = e.url;
+      tab.favicon = getFaviconClass(e.url);
+      omniInput.value = getDisplayUrl(e.url);
+    }
+  });
+
+  pageFrame.addEventListener('page-title-updated', (e) => {
+    const tab = tabs.find(t => t.id === activeTabId);
+    if (tab && e.title) {
+      tab.title = e.title;
+      renderTabs();
+    }
+  });
+}
 // Note: cross-origin iframes cannot report back navigation/title changes
 // due to browser security. This is a limitation of the web version.
 
@@ -259,12 +292,20 @@ document.querySelectorAll('.ntp-site[data-url]').forEach(site => {
   });
 });
 
-// Nav buttons — use browser history (limited for cross-origin iframes)
+// Nav buttons
 navBack.addEventListener('click', () => {
-  try { pageFrame.contentWindow.history.back(); } catch(e) {}
+  if (isElectron) {
+    if (pageFrame.canGoBack && pageFrame.canGoBack()) pageFrame.goBack();
+  } else {
+    try { pageFrame.contentWindow.history.back(); } catch(e) {}
+  }
 });
 navForward.addEventListener('click', () => {
-  try { pageFrame.contentWindow.history.forward(); } catch(e) {}
+  if (isElectron) {
+    if (pageFrame.canGoForward && pageFrame.canGoForward()) pageFrame.goForward();
+  } else {
+    try { pageFrame.contentWindow.history.forward(); } catch(e) {}
+  }
 });
 
 // ===== Copilot Side Pane =====
@@ -397,7 +438,12 @@ switchToTab = function(id) {
   nudgeWrap.style.width = (tab && tab.url) ? longWidth + 'px' : shortWidth + 'px';
 };
 
-// Create initial tabs
-createTab('pages/baidu.html', 'Baidu');
-createTab('pages/medium-article.html', 'Agentic AI vs Generative AI');
+// Create initial tabs — Electron uses real URLs, browser uses local mock pages
+if (isElectron) {
+  createTab('https://www.baidu.com', 'Baidu');
+  createTab('https://medium.com/@myscale/agentic-ai-vs-generative-ai-understanding-the-key-differences-e3607e750a20', 'Agentic AI vs Generative AI');
+} else {
+  createTab('pages/baidu.html', 'Baidu');
+  createTab('pages/medium-article.html', 'Agentic AI vs Generative AI');
+}
 createTab(null, 'New Tab');
