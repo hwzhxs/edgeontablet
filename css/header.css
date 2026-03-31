@@ -191,6 +191,13 @@
   width: 20px;
   height: 20px;
   color: rgba(0,0,0,0.86);
+  transition: opacity 0.15s ease;
+}
+
+/* Hide lock icon when input is focused */
+.omni-box:has(.omni-focused) .omni-lock {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .omni-input {
@@ -202,14 +209,14 @@
   outline: none;
   text-align: center;
   width: 200px;
-  transition: width 0.2s ease, text-align 0.2s ease;
+  transition: width 0.2s ease, text-align 0.2s ease, padding 0.2s ease;
 }
 
-/* Focused state: expand input, left-align, leave room for lock + refresh icons */
+/* Focused state: full width, left-aligned, no padding for lock */
 .omni-input.omni-focused {
-  width: calc(100% - 72px);
+  width: calc(100% - 48px);
   text-align: left;
-  padding-left: 24px;
+  padding-left: 12px;
 }
 
 .omni-refresh {
