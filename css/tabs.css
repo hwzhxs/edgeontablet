@@ -27,6 +27,14 @@
   flex-shrink: 0;
 }
 
+.tab-favicon-img {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
 .tab-favicon-ppt { background: #D04423; }
 .tab-favicon-pdf { background: #C4281C; }
 .tab-favicon-edge {

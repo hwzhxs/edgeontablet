@@ -81,6 +81,7 @@ function createTab(url = null, title = 'New Tab') {
     url: url,
     title: title,
     favicon: url ? getFaviconClass(url) : 'tab-favicon-edge',
+    faviconUrl: url ? getFaviconUrl(url) : null,
     history: url ? [url] : [],  // navigation history stack
     historyIndex: url ? 0 : -1, // current position in history
   };
@@ -151,12 +152,18 @@ function switchToTab(id) {
 }
 
 function getFaviconClass(url) {
-  if (!url) return 'tab-favicon-edge';
-  if (url.includes('baidu')) return 'tab-favicon-baidu';
-  if (url.includes('medium')) return 'tab-favicon-medium';
-  if (url.includes('youtube')) return 'tab-favicon-youtube';
-  if (url.includes('github')) return 'tab-favicon-github';
   return 'tab-favicon-edge';
+}
+
+// Get real favicon URL for a website
+function getFaviconUrl(url) {
+  if (!url || url.startsWith('pages/')) return null;
+  try {
+    const hostname = new URL(url).hostname;
+    return 'https://www.google.com/s2/favicons?domain=' + hostname + '&sz=32';
+  } catch {
+    return null;
+  }
 }
 
 function getDisplayUrl(url) {
@@ -190,7 +197,10 @@ function renderTabs() {
     el.draggable = true;
 
     el.innerHTML = `
-      <div class="tab-favicon ${tab.favicon}"></div>
+      ${tab.faviconUrl
+        ? `<img class="tab-favicon-img" src="${tab.faviconUrl}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="tab-favicon ${tab.favicon}" style="display:none"></div>`
+        : `<div class="tab-favicon ${tab.favicon}"></div>`
+      }
       <span class="tab-title">${tab.title}</span>
       <button class="tab-close">&times;</button>
       ${tab.id === activeTabId ? '<div class="tab-wing-left"></div><div class="tab-wing-right"></div>' : ''}
@@ -292,6 +302,7 @@ function navigateCurrentTab(url) {
     tab.url = url;
     tab.title = getDisplayUrl(url);
     tab.favicon = getFaviconClass(url);
+    tab.faviconUrl = getFaviconUrl(url);
   }
   ntpPage.classList.remove('visible');
   pageFrame.style.display = 'flex';
