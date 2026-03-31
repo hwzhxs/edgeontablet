@@ -290,7 +290,14 @@ if (isElectron && pageFrame.addEventListener) {
 // ===== URL Navigation =====
 
 function navigateCurrentTab(url) {
-  if (!url.startsWith('http') && !url.startsWith('pages/')) url = 'https://' + url;
+  // If not a URL, search with Bing
+  if (!url.startsWith('http') && !url.startsWith('pages/')) {
+    if (url.includes('.') && !url.includes(' ')) {
+      url = 'https://' + url;
+    } else {
+      url = 'https://www.bing.com/search?q=' + encodeURIComponent(url);
+    }
+  }
   const tab = tabs.find(t => t.id === activeTabId);
   if (tab) {
     // Push to history (trim forward history if we navigated back before)
