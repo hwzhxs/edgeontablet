@@ -188,8 +188,8 @@
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   color: rgba(0,0,0,0.56);
 }
 
@@ -202,6 +202,14 @@
   outline: none;
   text-align: center;
   width: 200px;
+  transition: width 0.2s ease, text-align 0.2s ease;
+}
+
+/* Focused state: expand input, left-align, leave room for lock + refresh icons */
+.omni-input.omni-focused {
+  width: calc(100% - 72px);
+  text-align: left;
+  padding-left: 24px;
 }
 
 .omni-refresh {
