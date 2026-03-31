@@ -348,16 +348,13 @@ omniInput.addEventListener('keydown', (e) => {
   }
 });
 
-// NTP search
+// NTP search — same logic as omnibox
 ntpSearchInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault();
     const query = ntpSearchInput.value.trim();
     if (query) {
-      const url = query.includes('.') && !query.includes(' ')
-        ? 'https://' + query
-        : 'https://www.bing.com/search?q=' + encodeURIComponent(query);
-      navigateCurrentTab(url);
+      navigateCurrentTab(query);
       ntpSearchInput.value = '';
     }
   }
