@@ -330,7 +330,7 @@ omniInput.addEventListener('focus', () => {
     omniInput.value = tab.url;
     omniInput.classList.add('omni-focused');
   }
-  omniInput.select();
+  requestAnimationFrame(() => omniInput.select());
 });
 omniInput.addEventListener('blur', () => {
   const tab = tabs.find(t => t.id === activeTabId);
